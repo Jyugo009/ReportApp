@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using DatingApp.Classes;
+using DatingApp.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,16 +16,15 @@ namespace DatingApp
 {
     public partial class EditOperatorForm : Form
     {
-        private Operator opToEdit { get; set; }
+        readonly IOperatorService _operatorService;
+        readonly Operator opToEdit;
 
-        private List<Operator> operators;
-
-        public EditOperatorForm(Operator opToEdit, List<Operator> operators)
+        public EditOperatorForm(Operator opToEdit, IOperatorService operatorService)
         {
             if (opToEdit != null)
             {
                 InitializeComponent();
-                this.operators = operators;
+                _operatorService = operatorService;
                 this.opToEdit = opToEdit;
 
                 foreach (var Id in opToEdit.Ids)
@@ -48,18 +49,7 @@ namespace DatingApp
         {
             var newIds = textBox1.Text.Split(',').Select(id => id.Trim()).ToList();
 
-            opToEdit.Ids.Clear();
-
-            foreach (var id in newIds)
-            {
-                opToEdit.DeleteExistIds(id, operators);
-            }
-
-            opToEdit.Ids = newIds;
-
-            string json = JsonConvert.SerializeObject(operators);
-
-            File.WriteAllText("operators.json", json);
+            _operatorService.EditOperator(opToEdit, newIds);
 
             this.DialogResult = DialogResult.OK;
 

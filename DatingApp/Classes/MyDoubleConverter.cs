@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsvHelper.TypeConversion;
 
-namespace DatingApp
+namespace DatingApp.Classes
 {
     public class MyDoubleConverter : DoubleConverter
     {
