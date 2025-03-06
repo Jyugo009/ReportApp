@@ -7,36 +7,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DatingApp.Classes;
+using DatingApp.Interfaces;
 
 namespace DatingApp
 {
     public partial class ReportForm : Form
     {
-        private List<Record> records;
+       private readonly IOperatorService _operatorService;
 
-        private List<Operator> operators;
-
-        public ReportForm(List<Record> records, List<Operator> operators)
+        public ReportForm(IOperatorService operatorService)
         {
             InitializeComponent();
-            this.operators = operators;
-            this.records = records;
+            _operatorService = operatorService;
             string currentDate = DateTime.Now.ToString("dd.MM.yy");
             List<Record> exactRecords = new List<Record>();
 
 
 
 
-            foreach (Operator op in operators)
+            foreach (Operator op in _operatorService.Operators)
             {
-                var opRecords = records.Where(r => op.Ids.Contains(r.id)).ToList();
+                var opRecords = _operatorService.Records.Where(r => op.Ids.Contains(r._id)).ToList();
 
-                listBox1.Items.Add($"{op.Name} {opRecords.Sum(record => record.bonuses):F2}");
+                listBox1.Items.Add($"{op.Name} {opRecords.Sum(record => record._bonuses):F2}");
 
                 exactRecords.AddRange(opRecords);
             }
 
-            listBox1.Items.Insert(0, $"{currentDate} Тотал {exactRecords.Sum(r => r.bonuses):F2}");
+            listBox1.Items.Insert(0, $"{currentDate} Тотал {exactRecords.Sum(r => r._bonuses):F2}");
 
         }
 

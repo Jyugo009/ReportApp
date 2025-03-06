@@ -8,33 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DatingApp.Classes;
+using DatingApp.Interfaces;
 
 namespace DatingApp
 {
     public partial class AddOperatorForm : Form
     {
-        private List<Operator> operators;
+        private readonly IOperatorService _operatorService;
 
-
-        public AddOperatorForm(List<Operator> operators)
+        public AddOperatorForm(IOperatorService operatorService)
         {
             InitializeComponent();
-            this.operators = operators;
+            _operatorService = operatorService;
         }
 
         private void AcceptAddOperatorButton_Click(object sender, EventArgs e)
         {
-            Operator newOp = new Operator();
-            newOp.Name = textBox1.Text;
-            newOp.Ids = textBox2.Text.Split(',').Select(id => id.Trim()).ToList();
+            List<string> ids = textBox2.Text.Split(',').Select(id => id.Trim()).ToList();
 
-            foreach (var id in newOp.Ids)
-            {
-                newOp.DeleteExistIds(id, operators);
-            }
-                 
+            _operatorService.AddOperator(textBox1.Text, ids);
 
-            operators.Add(newOp);
             this.DialogResult = DialogResult.OK;
         }        
 
