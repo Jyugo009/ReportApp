@@ -12,10 +12,8 @@ namespace DatingApp.Classes
     internal class OperatorService : IOperatorService
     {
         private List<Operator> _operators = new List<Operator>();
-        private List<Record> _records = new List<Record>();
-
         public List<Operator> Operators => _operators;
-        public List<Record> Records => _records;
+        
 
         public void AddOperator(string name, List<string> ids)
         {
@@ -52,8 +50,6 @@ namespace DatingApp.Classes
 
         public void DeleteAllOperators() => Operators.Clear();
 
-        public void DeleteAllRecords() => Records.Clear();
-
         public void DeleteExistIds(string id)
         {
 
@@ -67,30 +63,16 @@ namespace DatingApp.Classes
 
         }
 
-        public List<(string OperatorName, List<Record> Records, double TotalBonuses)> GetOperatorRecords(List<Record> consolidatedRecords)
-        {
-            var result = new List<(string, List<Record>, double)>();
-
-            foreach (var op in Operators)
-            {
-                var opRecords = consolidatedRecords.Where(r => op.Ids.Contains(r._id)).ToList();
-                double totalBonuses = opRecords.Sum(r => r._bonuses);
-                result.Add((op.Name, opRecords, totalBonuses));
-            }
-
-            return result;
-        }
-
         public void EditOperator(Operator opToEdit, List<string> newIds)
         {
             opToEdit.Ids.Clear();
+
+            opToEdit.Ids = newIds;
 
             foreach (var id in newIds)
             {
                 DeleteExistIds(id);
             }
-
-            opToEdit.Ids = newIds;
 
             string json = JsonConvert.SerializeObject(Operators);
 

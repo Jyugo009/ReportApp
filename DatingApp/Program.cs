@@ -11,9 +11,11 @@ namespace DatingApp
             ApplicationConfiguration.Initialize();
 
             IOperatorService opService = new OperatorService();
-            IDataProcessor dataProcessor = new CsvDataProcessor(opService);
+            IRecordService recordService = new RecordService();
+            IDataProcessor dataProcessor = new CsvDataProcessor(recordService);
+            
 
-            Application.Run(new MainForm(opService, dataProcessor));
+            Application.Run(new MainForm(opService, dataProcessor,recordService));
         }
     }
 }

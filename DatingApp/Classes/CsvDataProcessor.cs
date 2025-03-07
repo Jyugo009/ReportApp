@@ -11,28 +11,35 @@ namespace DatingApp.Classes
 {
     internal class CsvDataProcessor : IDataProcessor
     {
-        private readonly IOperatorService _operatorService;
+        private readonly IRecordService _recordService;
 
-        public CsvDataProcessor(IOperatorService operatorService)
+        public CsvDataProcessor(IRecordService recordService)
         {
-            _operatorService = operatorService;
+            _recordService = recordService;
         }
         public List<Record> ProcessData(IEnumerable<string> filePaths)
         {
             foreach (string filePath in filePaths)
             {
-                using (var reader = new StreamReader(filePath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                try
                 {
-                    var newRecords = csv.GetRecords<Record>().ToList();
-                    _operatorService.Records.AddRange(newRecords);
+                    using (var reader = new StreamReader(filePath))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        var newRecords = csv.GetRecords<Record>().ToList();
+                        _recordService.Records.AddRange(newRecords);
+                    }
+                }
+                catch(Exception ex) 
+                { 
+                    MessageBox.Show("Ошибка! Убедитесь, что выбран файл формата .csv с необходимыми полями.");
                 }
             }
 
-            _operatorService.Records.AddRange(_operatorService.Records);
+            _recordService.Records.AddRange(_recordService.Records);
 
-            var consolidatedRecords = _operatorService.Records.GroupBy(r => r._id)
-            .Select(grp => new Record(grp.Sum(r => r._bonuses), grp.Key, grp.First()._lady)).ToList();
+            var consolidatedRecords = _recordService.Records.GroupBy(r => r.Id)
+            .Select(grp => new Record(grp.Sum(r => r.Bonuses), grp.Key, grp.First().Lady)).ToList();
 
             return consolidatedRecords;
         }
