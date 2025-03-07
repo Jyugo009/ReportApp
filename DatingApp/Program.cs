@@ -10,12 +10,13 @@ namespace DatingApp
         {
             ApplicationConfiguration.Initialize();
 
+
             IOperatorService opService = new OperatorService();
             IRecordService recordService = new RecordService();
             IDataProcessor dataProcessor = new CsvDataProcessor(recordService);
-            
 
-            Application.Run(new MainForm(opService, dataProcessor,recordService));
+            Application.Run(new MainForm(opService, dataProcessor, recordService));
+
         }
     }
 }
