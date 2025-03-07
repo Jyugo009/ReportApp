@@ -14,28 +14,23 @@ namespace DatingApp
 {
     public partial class ReportForm : Form
     {
-       private readonly IOperatorService _operatorService;
+        private readonly IOperatorService _operatorService;
+        private readonly IRecordService _recordService;
 
-        public ReportForm(IOperatorService operatorService)
+        public ReportForm(IOperatorService operatorService, IRecordService recordService)
         {
             InitializeComponent();
             _operatorService = operatorService;
+            _recordService = recordService;
+
             string currentDate = DateTime.Now.ToString("dd.MM.yy");
-            List<Record> exactRecords = new List<Record>();
-
-
-
 
             foreach (Operator op in _operatorService.Operators)
             {
-                var opRecords = _operatorService.Records.Where(r => op.Ids.Contains(r._id)).ToList();
-
-                listBox1.Items.Add($"{op.Name} {opRecords.Sum(record => record._bonuses):F2}");
-
-                exactRecords.AddRange(opRecords);
+                listBox1.Items.Add($"{op.Name} {_recordService.GetOpTotal(op):F2}");
             }
 
-            listBox1.Items.Insert(0, $"{currentDate} Тотал {exactRecords.Sum(r => r._bonuses):F2}");
+            listBox1.Items.Insert(0, $"{currentDate} Тотал {_recordService.GetAllTotal():F2}");
 
         }
 

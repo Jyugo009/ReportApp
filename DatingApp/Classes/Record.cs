@@ -9,16 +9,16 @@ namespace DatingApp.Classes
     public class Record
     {
         [CsvHelper.Configuration.Attributes.TypeConverter(typeof(MyDoubleConverter))]
-        public readonly double _bonuses;
-        public readonly string _id;
-        public readonly string _lady;
+        public double Bonuses { get; }
+        public string Id { get;}
+        public string Lady { get; }
 
 
         public Record(double bonuses, string id, string lady)
         {
-            _bonuses = bonuses;
-            _id = id;
-            _lady = lady;
+            Bonuses = bonuses;
+            Id = id;
+            Lady = lady;
         }
 
 
