@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            BrowseCsv = new Button();
+            Browse = new Button();
             listBox1 = new ListBox();
             listBox2 = new ListBox();
             AddOperator = new Button();
@@ -39,15 +39,15 @@
             EarseListBoxButton = new Button();
             SuspendLayout();
             // 
-            // BrowseCsv
+            // Browse
             // 
-            BrowseCsv.Location = new Point(592, 505);
-            BrowseCsv.Name = "BrowseCsv";
-            BrowseCsv.Size = new Size(197, 29);
-            BrowseCsv.TabIndex = 0;
-            BrowseCsv.Text = "Загрузить CSV";
-            BrowseCsv.UseVisualStyleBackColor = true;
-            BrowseCsv.Click += BrowseCsv_Click;
+            Browse.Location = new Point(592, 505);
+            Browse.Name = "Browse";
+            Browse.Size = new Size(197, 29);
+            Browse.TabIndex = 0;
+            Browse.Text = "Загрузить";
+            Browse.UseVisualStyleBackColor = true;
+            Browse.Click += Browse_Click;
             // 
             // listBox1
             // 
@@ -128,7 +128,7 @@
             EarseListBoxButton.UseVisualStyleBackColor = true;
             EarseListBoxButton.Click += EarseListBoxButton_Click;
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -142,10 +142,10 @@
             Controls.Add(AddOperator);
             Controls.Add(listBox2);
             Controls.Add(listBox1);
-            Controls.Add(BrowseCsv);
+            Controls.Add(Browse);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             MaximizeBox = false;
-            Name = "Form1";
+            Name = "MainForm";
             Text = "Prime Alive App ver.0.83";
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
@@ -155,7 +155,7 @@
 
         #endregion
 
-        private Button BrowseCsv;
+        private Button Browse;
         private ListBox listBox1;
         private ListBox listBox2;
         private Button AddOperator;

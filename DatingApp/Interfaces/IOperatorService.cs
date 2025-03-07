@@ -11,18 +11,13 @@ namespace DatingApp.Interfaces
     {
         List<Operator> Operators { get; }
 
-        List<Record> Records { get; }
-
         void AddOperator(string name, List<string> ids);
 
         void DeleteExistIds(string id);
 
         void DeleteAllOperators();
 
-        void DeleteAllRecords();
-
         void DeleteOperator(string selectedItem);
-        List<(string OperatorName, List<Record> Records, double TotalBonuses)> GetOperatorRecords(List<Record> consolidatedRecords);
 
         void EditOperator(Operator opToEdit, List<string> newIds);
 

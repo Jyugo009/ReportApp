@@ -12,12 +12,14 @@ namespace DatingApp
     {
         private readonly IOperatorService _operatorService;
         private readonly IDataProcessor _dataProcessor;
+        private readonly IRecordService _recordService;
 
-        public MainForm(IOperatorService operatorService, IDataProcessor dataProcessor)
+        public MainForm(IOperatorService operatorService, IDataProcessor dataProcessor, IRecordService recordService)
         {
             InitializeComponent();
             _operatorService = operatorService;
             _dataProcessor = dataProcessor;
+            _recordService = recordService;
         }
 
         private void textOutput(object sender, EventArgs e)
@@ -25,7 +27,7 @@ namespace DatingApp
 
         }
 
-        private void BrowseCsv_Click(object sender, EventArgs e)
+        private void Browse_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -35,20 +37,20 @@ namespace DatingApp
                 {
                     RefreshListBox1();
 
-                    List<Record> consolidatedRecords = _dataProcessor.ProcessData(openFileDialog.FileNames);
+                    _dataProcessor.ProcessData(openFileDialog.FileNames);
 
-                    var operatorRecords = _operatorService.GetOperatorRecords(consolidatedRecords);
-
-                    foreach (var (name, records, totalBonuses) in operatorRecords)
+                    foreach (var Operator in _operatorService.Operators)
                     {
-                        listBox1.Items.Add($"Оператор {name}:\n");
+                        listBox1.Items.Add($"Оператор {Operator.Name}:\n");
 
-                        foreach (var record in records)
+                        var operatorRecords = _recordService.GetOpRecords(Operator);
+
+                        foreach (var record in operatorRecords)
                         {
-                            listBox1.Items.Add($"Id: {record._id}, Леди: {record._lady}, Бонусы: {record._bonuses:F2}");
+                            listBox1.Items.Add($"Id: {record.Id}, Леди: {record.Lady}, Бонусы: {record.Bonuses:F2}");
                         }
 
-                        listBox1.Items.Add($" Сумма бонусов: {totalBonuses:F2}\n");
+                        listBox1.Items.Add($" Сумма бонусов: {_recordService.GetOpTotal(Operator):F2}\n");
                     }
 
                 }
@@ -126,15 +128,14 @@ namespace DatingApp
             {
                 if (listBox2.SelectedItem != null)
                 {
-                    string selectedItemText = listBox2.SelectedItem.ToString();
-                    string opName = selectedItemText.Split(':')[0];
+                    string opName = listBox2.SelectedItem.ToString().Split(':')[0];
 
                     Operator opToEdit = _operatorService.Operators.Find(op => op.Name == opName);
 
                     if (opToEdit != null)
                     {
                         EditOperatorForm editOpForm = new EditOperatorForm(opToEdit, _operatorService);
-                        var result = editOpForm.ShowDialog();
+                        editOpForm.ShowDialog();
                         RefreshListBox();
                     }
                     else
@@ -151,11 +152,11 @@ namespace DatingApp
         }
         private void MakeReport_Click(object sender, EventArgs e)
         {
-            ReportForm reportForm = new ReportForm(_operatorService);
+            ReportForm reportForm = new ReportForm(_operatorService, _recordService);
 
             if (reportForm.ShowDialog() == DialogResult.OK)
             {
-                _operatorService.DeleteAllRecords();
+                _recordService.DeleteAllRecords();
                 listBox1.Items.Clear();
             }
 
@@ -163,8 +164,7 @@ namespace DatingApp
 
         private void EarseListBoxButton_Click(object sender, EventArgs e)
         {
-            _operatorService.Records.Clear();
-
+            _recordService.DeleteAllRecords();
             listBox1.Items.Clear();
         }
     }  
