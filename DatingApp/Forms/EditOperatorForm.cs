@@ -1,33 +1,23 @@
-﻿using DatingApp.Classes;
-using DatingApp.Interfaces;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using DatingApp.Interfaces;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
+
 
 namespace DatingApp
 {
     public partial class EditOperatorForm : Form
     {
-        readonly IOperatorService _operatorService;
-        readonly Operator opToEdit;
+        private readonly IOperatorService _operatorService;
+        private readonly string _operatorName;
 
-        public EditOperatorForm(Operator opToEdit, IOperatorService operatorService)
+        public EditOperatorForm(string operatorName, IOperatorService operatorService)
         {
-            if (opToEdit != null)
+            if (operatorName != null)
             {
                 InitializeComponent();
                 _operatorService = operatorService;
-                this.opToEdit = opToEdit;
+                _operatorName = operatorName;
 
-                foreach (var Id in opToEdit.Ids)
+                foreach (var Id in _operatorService.GetOperator(operatorName).Ids)
                 {
                     textBox1.AppendText($"{Id}, ");
                 }
@@ -39,17 +29,13 @@ namespace DatingApp
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-
-        }
+        private void textBox1_TextChanged(object sender, EventArgs e){}
 
         private void AcceptEditOperatorButton_Click(object sender, EventArgs e)
         {
             var newIds = textBox1.Text.Split(',').Select(id => id.Trim()).ToList();
 
-            _operatorService.EditOperator(opToEdit, newIds);
+            _operatorService.EditOperator(_operatorService.GetOperator(_operatorName), newIds);
 
             this.DialogResult = DialogResult.OK;
 

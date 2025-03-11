@@ -1,11 +1,6 @@
 ﻿using CsvHelper;
 using DatingApp.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DatingApp.Classes
 {
@@ -30,7 +25,7 @@ namespace DatingApp.Classes
                         _recordService.Records.AddRange(newRecords);
                     }
                 }
-                catch(Exception ex) 
+                catch(Exception) 
                 { 
                     MessageBox.Show("Ошибка! Убедитесь, что выбран файл формата .csv с необходимыми полями.");
                 }

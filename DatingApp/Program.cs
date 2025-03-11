@@ -1,5 +1,6 @@
 using DatingApp.Classes;
 using DatingApp.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DatingApp
 {
@@ -10,12 +11,23 @@ namespace DatingApp
         {
             ApplicationConfiguration.Initialize();
 
+            var services = new ServiceCollection();
 
-            IOperatorService opService = new OperatorService();
-            IRecordService recordService = new RecordService();
-            IDataProcessor dataProcessor = new CsvDataProcessor(recordService);
+            services.AddSingleton<IOperatorService, OperatorService>();
+            services.AddSingleton<IRecordService, RecordService>();
+            services.AddTransient<IDataProcessor, CsvDataProcessor>();
+            services.AddTransient<MainForm>();
+            services.AddTransient<AddOperatorForm>();
+            services.AddTransient<EditOperatorForm>();
+            services.AddTransient<ReportForm>();
+            services.AddTransient<ISessionDataService, SessionDataService>();
 
-            Application.Run(new MainForm(opService, dataProcessor, recordService));
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                var mainForm = serviceProvider.GetRequiredService<MainForm>();
+                Application.Run(mainForm);
+            }
+                
 
         }
     }

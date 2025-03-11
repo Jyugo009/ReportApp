@@ -1,11 +1,5 @@
 ﻿using DatingApp.Interfaces;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DatingApp.Classes
 {
@@ -13,7 +7,7 @@ namespace DatingApp.Classes
     {
         private List<Operator> _operators = new List<Operator>();
         public List<Operator> Operators => _operators;
-        
+
 
         public void AddOperator(string name, List<string> ids)
         {
@@ -50,9 +44,10 @@ namespace DatingApp.Classes
 
         public void DeleteAllOperators() => Operators.Clear();
 
+        public Operator GetOperator(string name) => Operators.FirstOrDefault(op => op.Name == name); 
+
         public void DeleteExistIds(string id)
         {
-
             foreach (Operator op in Operators)
             {
                 if (op.Ids.Contains(id))
@@ -63,16 +58,16 @@ namespace DatingApp.Classes
 
         }
 
-        public void EditOperator(Operator opToEdit, List<string> newIds)
+        public void EditOperator(Operator operatorToEdit, List<string> newIds)
         {
-            opToEdit.Ids.Clear();
+            operatorToEdit.Ids.Clear();
 
-            opToEdit.Ids = newIds;
-
-            foreach (var id in newIds)
+            for (int i = newIds.Count - 1; i >= 0; i--)
             {
-                DeleteExistIds(id);
+                DeleteExistIds(newIds[i]);
             }
+
+            operatorToEdit.Ids = newIds;
 
             string json = JsonConvert.SerializeObject(Operators);
 
@@ -82,21 +77,6 @@ namespace DatingApp.Classes
         
 
 
-        public void LoadExistData(string jsonFromFile)
-        {
-            if (jsonFromFile != null)
-            {
-                var list = JsonConvert.DeserializeObject<List<Operator>>(jsonFromFile);
-                foreach (var item in list)
-                {
-                    AddOperator(item.Name, item.Ids);
-                }    
-            }
-            else
-            {
-
-                MessageBox.Show("Данные с предыдущего сеанса утеряны! Возможно, был удален файл operators.json!");
-            }
-        }
+        
     }
 }

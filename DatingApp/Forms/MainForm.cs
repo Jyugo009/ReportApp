@@ -1,10 +1,6 @@
-using System.Formats.Asn1;
-using System.Globalization;
-using System.Xml.Linq;
-using CsvHelper;
 using DatingApp.Classes;
 using DatingApp.Interfaces;
-using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DatingApp
 {
@@ -13,19 +9,21 @@ namespace DatingApp
         private readonly IOperatorService _operatorService;
         private readonly IDataProcessor _dataProcessor;
         private readonly IRecordService _recordService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ISessionDataService _sessionDataService;
 
-        public MainForm(IOperatorService operatorService, IDataProcessor dataProcessor, IRecordService recordService)
+        public MainForm(IOperatorService operatorService, IDataProcessor dataProcessor, IRecordService recordService, 
+            IServiceProvider serviceProvider, ISessionDataService sessionDataService)
         {
             InitializeComponent();
             _operatorService = operatorService;
             _dataProcessor = dataProcessor;
             _recordService = recordService;
+            _serviceProvider = serviceProvider;
+            _sessionDataService = sessionDataService;
         }
 
-        private void textOutput(object sender, EventArgs e)
-        {
-
-        }
+        private void textOutput(object sender, EventArgs e){}
 
         private void Browse_Click(object sender, EventArgs e)
         {
@@ -59,12 +57,7 @@ namespace DatingApp
 
         }
 
-        private void RefreshListBox1()
-        {
-            listBox1.Items.Clear();
-
-
-        }
+        private void RefreshListBox1() => listBox1.Items.Clear();
 
         private void RefreshListBox()
         {
@@ -78,7 +71,7 @@ namespace DatingApp
 
         private void AddOperator_Click(object sender, EventArgs e)
         {
-            AddOperatorForm addOpForm = new AddOperatorForm(_operatorService);
+            var addOpForm = _serviceProvider.GetRequiredService<AddOperatorForm>();
 
             if (addOpForm.ShowDialog() == DialogResult.OK)
             {
@@ -89,21 +82,11 @@ namespace DatingApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            if (File.Exists("operators.json"))
-            {
-                string jsonFromFile = File.ReadAllText("operators.json");
-
-                _operatorService.LoadExistData(jsonFromFile);
-
-                RefreshListBox();
-            }
+            _sessionDataService.StartSessionLoad();
+            RefreshListBox();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            string json = JsonConvert.SerializeObject(_operatorService.Operators);
-            File.WriteAllText("operators.json", json);
-        }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) => _sessionDataService.EndSessionSave();
 
         private void DeleteOperator_Click(object sender, EventArgs e)
         {
@@ -126,33 +109,29 @@ namespace DatingApp
         {
             if (listBox2.SelectedItem != null)
             {
-                if (listBox2.SelectedItem != null)
+                string operatorName = listBox2.SelectedItem.ToString().Split(':')[0];
+
+                if (operatorName != null)
                 {
-                    string opName = listBox2.SelectedItem.ToString().Split(':')[0];
-
-                    Operator opToEdit = _operatorService.Operators.Find(op => op.Name == opName);
-
-                    if (opToEdit != null)
-                    {
-                        EditOperatorForm editOpForm = new EditOperatorForm(opToEdit, _operatorService);
-                        editOpForm.ShowDialog();
-                        RefreshListBox();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Выбранный Оператор не найден.");
-                    }
+                    var editOpForm = new EditOperatorForm(operatorName, _serviceProvider.GetRequiredService<IOperatorService>());
+                    editOpForm.ShowDialog();
+                    RefreshListBox();
                 }
-
                 else
                 {
-                    MessageBox.Show("Пожалуйста, выберите Оператора для изменения.");
+                    MessageBox.Show("Выбранный Оператор не найден.");
                 }
             }
+
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите Оператора для изменения.");
+            }
+            
         }
         private void MakeReport_Click(object sender, EventArgs e)
         {
-            ReportForm reportForm = new ReportForm(_operatorService, _recordService);
+            ReportForm reportForm = _serviceProvider.GetRequiredService<ReportForm>();
 
             if (reportForm.ShowDialog() == DialogResult.OK)
             {
