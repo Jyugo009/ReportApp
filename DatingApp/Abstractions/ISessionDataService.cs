@@ -1,4 +1,4 @@
-﻿namespace DatingApp.Interfaces
+﻿namespace ReportApp.Abstractions
 {
     public interface ISessionDataService
     {

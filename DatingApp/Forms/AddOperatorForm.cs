@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using DatingApp.Interfaces;
+using ReportApp.Abstractions;
 
-namespace DatingApp
+namespace ReportApp
 {
     public partial class AddOperatorForm : Form
     {

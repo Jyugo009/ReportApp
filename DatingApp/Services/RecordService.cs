@@ -1,6 +1,7 @@
-﻿using DatingApp.Interfaces;
+﻿using ReportApp.Abstractions;
+using ReportApp.Models;
 
-namespace DatingApp.Classes
+namespace ReportApp.Services
 {
     internal class RecordService : IRecordService
     {

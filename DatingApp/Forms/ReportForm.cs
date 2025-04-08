@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using DatingApp.Classes;
-using DatingApp.Interfaces;
+using ReportApp.Abstractions;
+using ReportApp.Models;
 
-namespace DatingApp
+namespace ReportApp
 {
     public partial class ReportForm : Form
     {

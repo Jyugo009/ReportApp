@@ -1,7 +1,8 @@
-﻿using DatingApp.Interfaces;
+﻿using ReportApp.Abstractions;
 using Newtonsoft.Json;
+using ReportApp.Models;
 
-namespace DatingApp.Classes
+namespace ReportApp.Services
 {
     public class SessionDataService : ISessionDataService 
     {

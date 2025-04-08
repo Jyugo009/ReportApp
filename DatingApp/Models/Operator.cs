@@ -1,4 +1,4 @@
-﻿namespace DatingApp.Classes
+﻿namespace ReportApp.Models
 {
     public class Operator
     {

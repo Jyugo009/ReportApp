@@ -1,8 +1,9 @@
-using DatingApp.Classes;
-using DatingApp.Interfaces;
+using ReportApp.Services;
+using ReportApp.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using ReportApp.Extentions;
 
-namespace DatingApp
+namespace ReportApp
 {
     internal static class Program
     {

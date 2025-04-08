@@ -1,4 +1,4 @@
-﻿namespace DatingApp
+﻿namespace ReportApp
 {
     partial class MainForm
     {

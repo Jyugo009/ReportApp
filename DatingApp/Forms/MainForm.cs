@@ -1,8 +1,8 @@
-using DatingApp.Classes;
-using DatingApp.Interfaces;
+using ReportApp.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using ReportApp.Models;
 
-namespace DatingApp
+namespace ReportApp
 {
     public partial class MainForm : Form
     {

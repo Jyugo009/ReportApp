@@ -1,4 +1,6 @@
-﻿namespace DatingApp.Classes
+﻿using ReportApp.Extentions;
+
+namespace ReportApp.Models
 {
     public class Record
     {

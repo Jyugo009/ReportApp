@@ -1,8 +1,9 @@
 ﻿using CsvHelper;
-using DatingApp.Interfaces;
+using ReportApp.Abstractions;
+using ReportApp.Models;
 using System.Globalization;
 
-namespace DatingApp.Classes
+namespace ReportApp.Extentions
 {
     internal class CsvDataProcessor : IDataProcessor
     {

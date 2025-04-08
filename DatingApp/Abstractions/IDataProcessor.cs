@@ -1,7 +1,8 @@
-﻿using DatingApp.Classes;
+﻿using ReportApp.Models;
 
-namespace DatingApp.Interfaces
+namespace ReportApp.Abstractions
 {
+
     public interface IDataProcessor
     {
         public List<Record> ProcessData(IEnumerable<string> filePaths);

@@ -1,8 +1,8 @@
-﻿using DatingApp.Interfaces;
+﻿using ReportApp.Abstractions;
 using System.Data;
 
 
-namespace DatingApp
+namespace ReportApp
 {
     public partial class EditOperatorForm : Form
     {

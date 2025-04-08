@@ -1,6 +1,6 @@
-﻿using DatingApp.Classes;
+﻿using ReportApp.Models;
 
-namespace DatingApp.Interfaces
+namespace ReportApp.Abstractions
 {
     public interface IOperatorService
     {

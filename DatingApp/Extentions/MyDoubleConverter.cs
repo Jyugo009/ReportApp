@@ -2,7 +2,7 @@
 using CsvHelper;
 using CsvHelper.TypeConversion;
 
-namespace DatingApp.Classes
+namespace ReportApp.Extentions
 {
     public class MyDoubleConverter : DoubleConverter
     {
